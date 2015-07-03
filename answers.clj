@@ -205,3 +205,6 @@
                   (if (fn? g)
                     (tramp g)
                     g)))))
+
+;156 Map Defaults
+(def map-defaults #(reduce (fn [m k] (assoc m k %)) {} %2))
