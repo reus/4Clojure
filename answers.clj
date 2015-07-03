@@ -1,4 +1,4 @@
-(ns _4clojure.core)
+(ns answers)
 
 ;4clojure solutions
 
