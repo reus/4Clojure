@@ -208,3 +208,11 @@
 
 ;156 Map Defaults
 (def map-defaults #(reduce (fn [m k] (assoc m k %)) {} %2))
+
+;83 A Half-Truth
+(def half-truth (fn [& bs]
+                  (and (not (every? identity bs))
+                       (not (every? not bs)))))
+
+;daowen's solution:
+(def half-truth2 #(boolean (and (some true? %&) (some false? %&))))
