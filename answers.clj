@@ -216,3 +216,19 @@
 
 ;daowen's solution:
 (def half-truth2 #(boolean (and (some true? %&) (some false? %&))))
+
+;166 Comparisons
+(def comparisons #(let [v (%1 %2 %3)
+                        w (%1 %3 %2)]
+                    (if v
+                      :lt
+                      (if w
+                        :gt
+                        :eq))))
+
+;daowen's solution:
+(fn cmp [lt x y]
+  (cond
+    (lt x y) :lt
+    (lt y x) :gt
+    :else :eq))
