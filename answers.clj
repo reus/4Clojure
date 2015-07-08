@@ -232,3 +232,12 @@
     (lt x y) :lt
     (lt y x) :gt
     :else :eq))
+
+;81 Set Intersection
+(def intersect (fn [s1 s2]
+                 (reduce #(if (some #{%2} s1)
+                            (conj %1 %2)
+                            %1) #{} s2)))
+
+;daowen's solution
+(def intersect-2 (comp set filter))
