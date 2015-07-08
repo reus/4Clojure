@@ -1,4 +1,4 @@
-(ns answers)
+(ns solutions)
 
 ;4clojure solutions
 
@@ -81,7 +81,7 @@
 (def grp3 (fn [f vs]
   (reduce #(merge-with into % {(f %2) [%2]}) {} vs)))
 
-;Seqs testing
+;65 Seqs testing
 (def test-seq (fn [s]
                 (let [new-s (conj (empty s) [:a 1] [:a 1] [:b 2])]
                   (if (= (count new-s) 2)
@@ -92,13 +92,13 @@
                       :list
                       :vector)))))
 
-;Greatest common divisor
+;66 Greatest common divisor
 (def gcd (fn [a b]
            (if (zero? b)
              a
              (gcd b (mod a b)))))
 
-;Prime numbers
+;67 Prime numbers
 (def ps (fn [n]
           (loop [primes [2]
                  col (iterate #(+ 2 %) 3)]
