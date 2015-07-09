@@ -257,3 +257,8 @@
                             (if (= p s)
                               (conj r (/ (- s t) u))
                               (recur p (* 10 q) (conj r (/ (- s t) u)) (conj l s)))))))
+
+;90 Cartesian Product
+(def cartesian-product #(set (for [x %1
+                                   y %2]
+                               [x y])))
