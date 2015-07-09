@@ -241,3 +241,19 @@
 
 ;daowen's solution
 (def intersect-2 (comp set filter))
+
+;107 Simple closures
+(def closure #(fn [x] (apply * (repeat % x))))
+
+;99 Product Digits
+(def product-digits (fn [x y]
+                      (loop [p (* x y)
+                             q 10
+                             r '()
+                             l [0]]
+                          (let [s (rem p q)
+                                t (last l)
+                                u (/ q 10)]
+                            (if (= p s)
+                              (conj r (/ (- s t) u))
+                              (recur p (* 10 q) (conj r (/ (- s t) u)) (conj l s)))))))
