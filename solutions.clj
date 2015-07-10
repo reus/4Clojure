@@ -262,3 +262,13 @@
 (def cartesian-product #(set (for [x %1
                                    y %2]
                                [x y])))
+
+;88 Symetric Difference
+(def symmetric-difference (fn [s1 s2]
+                           (let [all (into (into [] s1) s2)]
+                             (reduce #(if (and (some #{%2} s1) (some #{%2} s2))
+                                       %1
+                                        (conj %1 %2))
+                                    #{} all))))
+;daowen's solution
+(def symmetric-difference-2 #(clojure.set/difference (clojure.set/union % %2) (clojure.set/intersection % %2)))
