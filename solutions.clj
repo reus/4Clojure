@@ -272,3 +272,32 @@
                                     #{} all))))
 ;daowen's solution
 (def symmetric-difference-2 #(clojure.set/difference (clojure.set/union % %2) (clojure.set/intersection % %2)))
+
+;122 Read a binary number
+(def read-binary (fn [s] (apply + (map * (iterate #(* 2 %) 1) (reverse (map #(- (int %) (int \0)) (seq s)))))))
+
+;143 Dot product
+(def dot-product #(apply + (map * % %2)))
+
+;126 Through the Looking Class
+(def x java.lang.Class)
+
+;135 Infix Calculator
+(def infix (fn [& args]
+             (loop [xs args v 0 o +]
+               (let [x (first xs)]
+                 (if x
+                   (if (= (class x) Long)
+                     (recur (rest xs) (o v x) nil)
+                     (recur (rest xs) v x))
+                   v)))))
+
+;daowen's solution:
+(def infix-2 (fn infix-eval [&[x op y & t]]
+         (if op (recur (cons (op x y) t)) x)))
+
+;157 Indexing Sequences
+(def index-seq #(partition 2 (interleave % (range))))
+
+;daowen's solution:
+(def index-seq-2 #(map-indexed (fn [i v] [v i]) %))
