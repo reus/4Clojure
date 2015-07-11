@@ -301,3 +301,11 @@
 
 ;daowen's solution:
 (def index-seq-2 #(map-indexed (fn [i v] [v i]) %))
+
+;97 Pascal's Triangle
+(def pascals-triangle (fn
+                        ([n] (if (= n 1) [1] (pascals-triangle n [1])))
+                        ([n col] (if (= (count col) n)
+                                   col
+                                   (pascals-triangle n (reduce #(conj % (+ (first %2) (last %2))) [] (partition 2 1 (into [0] (conj col 0)))))))))
+
