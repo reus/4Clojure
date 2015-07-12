@@ -314,3 +314,10 @@
                           (loop [i 1, row [1]]
                             (if (= n i) row
                               (recur (inc i) (concat [1] (map #(apply + %) (partition 2 1 row)) [1]))))))
+
+;118 Re-implement Map
+(def my-map (fn my-map [f col]
+              (let [x (first col)]
+                (if x
+                  (lazy-seq (cons (f x) (my-map f (rest col))))
+                  nil))))
