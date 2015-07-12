@@ -307,5 +307,10 @@
                         ([n] (if (= n 1) [1] (pascals-triangle n [1])))
                         ([n col] (if (= (count col) n)
                                    col
-                                   (pascals-triangle n (reduce #(conj % (+ (first %2) (last %2))) [] (partition 2 1 (into [0] (conj col 0)))))))))
+                                   (pascals-triangle n (map #(apply + %) (partition 2 1 (concat [0] col [0]))))))))
 
+;daowen's solution
+(def pascals-triangle-2 (fn pascal [n]
+                          (loop [i 1, row [1]]
+                            (if (= n i) row
+                              (recur (inc i) (concat [1] (map #(apply + %) (partition 2 1 row)) [1]))))))
