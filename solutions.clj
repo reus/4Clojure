@@ -326,3 +326,13 @@
 (def sum-of-square-of-digits (fn [col]
                                (let [get-digits (fn [x] (map #(- (int %) (int \0)) (str x)))]
                                  (count (filter (fn [n] (let [ds (get-digits n)] (< n (reduce + (map #(* % %) ds))))) col)))))
+
+;95 To Tree, or not to Tree
+(def _tree? (fn tree? [t]
+              (or (nil? t)
+                  (and (coll? t)
+                       (= (count t) 3)
+                       (let [[v l r] t]
+                         (and
+                           (tree? l)
+                           (tree? r)))))))
