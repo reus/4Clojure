@@ -320,4 +320,9 @@
               (let [x (first col)]
                 (if x
                   (lazy-seq (cons (f x) (my-map f (rest col))))
-                  nil))))
+                  (lazy-seq)))))
+
+;120 Sum of square of digits
+(def sum-of-square-of-digits (fn [col]
+                               (let [get-digits (fn [x] (map #(- (int %) (int \0)) (str x)))]
+                                 (count (filter (fn [n] (let [ds (get-digits n)] (< n (reduce + (map #(* % %) ds))))) col)))))
