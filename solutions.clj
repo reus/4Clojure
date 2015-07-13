@@ -336,3 +336,29 @@
                          (and
                            (tree? l)
                            (tree? r)))))))
+
+;128 Recognize Playing Cards
+(def card (fn [s] 
+            (assoc {}
+                   :suit ({\D :diamond
+                           \H :heart
+                           \C :club
+                           \S :spade} (first s))
+                   :rank ({\T 8
+                           \J 9
+                           \Q 10
+                           \K 11
+                           \A 12
+                           \2 0
+                           \3 1
+                           \4 2
+                           \5 3
+                           \6 4
+                           \7 5
+                           \8 6
+                           \9 7} (last s)))))
+
+;austintaylor's solution:
+(def card-2 (fn [[s r]]
+              { :suit ({\D :diamond \H :heart \C :club \S :spade} s)
+               :rank (.indexOf (seq "23456789TJQKA") r)})
