@@ -361,4 +361,12 @@
 ;austintaylor's solution:
 (def card-2 (fn [[s r]]
               { :suit ({\D :diamond \H :heart \C :club \S :spade} s)
-               :rank (.indexOf (seq "23456789TJQKA") r)})
+               :rank (.indexOf (seq "23456789TJQKA") r)}))
+
+;102 intoCamelCase
+(def camel-case #(let [xs (clojure.string/split % #"-")]
+                   (str (first xs)
+                        (apply str (map clojure.string/capitalize (rest xs))))))
+
+;aceeca1's solution:
+(def camel-case-2 #(clojure.string/replace % #"-[a-z]" (comp clojure.string/upper-case last)))
