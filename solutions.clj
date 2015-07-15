@@ -206,33 +206,6 @@
                     (tramp g)
                     g)))))
 
-;156 Map Defaults
-(def map-defaults #(reduce (fn [m k] (assoc m k %)) {} %2))
-
-;83 A Half-Truth
-(def half-truth (fn [& bs]
-                  (and (not (every? identity bs))
-                       (not (every? not bs)))))
-
-;daowen's solution:
-(def half-truth2 #(boolean (and (some true? %&) (some false? %&))))
-
-;166 Comparisons
-(def comparisons #(let [v (%1 %2 %3)
-                        w (%1 %3 %2)]
-                    (if v
-                      :lt
-                      (if w
-                        :gt
-                        :eq))))
-
-;daowen's solution:
-(fn cmp [lt x y]
-  (cond
-    (lt x y) :lt
-    (lt y x) :gt
-    :else :eq))
-
 ;81 Set Intersection
 (def intersect (fn [s1 s2]
                  (reduce #(if (some #{%2} s1)
@@ -242,26 +215,11 @@
 ;daowen's solution
 (def intersect-2 (comp set filter))
 
-;107 Simple closures
-(def closure #(fn [x] (apply * (repeat % x))))
+;83 A Half-Truth
+(def half-truth (fn [& bs]
+                  (and (not (every? identity bs))
+                       (not (every? not bs)))))
 
-;99 Product Digits
-(def product-digits (fn [x y]
-                      (loop [p (* x y)
-                             q 10
-                             r '()
-                             l [0]]
-                          (let [s (rem p q)
-                                t (last l)
-                                u (/ q 10)]
-                            (if (= p s)
-                              (conj r (/ (- s t) u))
-                              (recur p (* 10 q) (conj r (/ (- s t) u)) (conj l s)))))))
-
-;90 Cartesian Product
-(def cartesian-product #(set (for [x %1
-                                   y %2]
-                               [x y])))
 
 ;88 Symetric Difference
 (def symmetric-difference (fn [s1 s2]
@@ -273,34 +231,22 @@
 ;daowen's solution
 (def symmetric-difference-2 #(clojure.set/difference (clojure.set/union % %2) (clojure.set/intersection % %2)))
 
-;122 Read a binary number
-(def read-binary (fn [s] (apply + (map * (iterate #(* 2 %) 1) (reverse (map #(- (int %) (int \0)) (seq s)))))))
+;90 Cartesian Product
+(def cartesian-product #(set (for [x %1
+                                   y %2]
+                               [x y])))
 
-;143 Dot product
-(def dot-product #(apply + (map * % %2)))
 
-;126 Through the Looking Class
-(def x java.lang.Class)
 
-;135 Infix Calculator
-(def infix (fn [& args]
-             (loop [xs args v 0 o +]
-               (let [x (first xs)]
-                 (if x
-                   (if (= (class x) Long)
-                     (recur (rest xs) (o v x) nil)
-                     (recur (rest xs) v x))
-                   v)))))
-
-;daowen's solution:
-(def infix-2 (fn infix-eval [&[x op y & t]]
-         (if op (recur (cons (op x y) t)) x)))
-
-;157 Indexing Sequences
-(def index-seq #(partition 2 (interleave % (range))))
-
-;daowen's solution:
-(def index-seq-2 #(map-indexed (fn [i v] [v i]) %))
+;95 To Tree, or not to Tree
+(def _tree? (fn tree? [t]
+              (or (nil? t)
+                  (and (coll? t)
+                       (= (count t) 3)
+                       (let [[v l r] t]
+                         (and
+                           (tree? l)
+                           (tree? r)))))))
 
 ;97 Pascal's Triangle
 (def pascals-triangle (fn
@@ -315,6 +261,34 @@
                             (if (= n i) row
                               (recur (inc i) (concat [1] (map #(apply + %) (partition 2 1 row)) [1]))))))
 
+;99 Product Digits
+(def product-digits (fn [x y]
+                      (loop [p (* x y)
+                             q 10
+                             r '()
+                             l [0]]
+                          (let [s (rem p q)
+                                t (last l)
+                                u (/ q 10)]
+                            (if (= p s)
+                              (conj r (/ (- s t) u))
+                              (recur p (* 10 q) (conj r (/ (- s t) u)) (conj l s)))))))
+
+;daowen's solution:
+(def half-truth2 #(boolean (and (some true? %&) (some false? %&))))
+
+;102 intoCamelCase
+(def camel-case #(let [xs (clojure.string/split % #"-")]
+                   (str (first xs)
+                        (apply str (map clojure.string/capitalize (rest xs))))))
+
+;aceeca1's solution:
+(def camel-case-2 #(clojure.string/replace % #"-[a-z]" (comp clojure.string/upper-case last)))
+
+
+;107 Simple closures
+(def closure #(fn [x] (apply * (repeat % x))))
+
 ;118 Re-implement Map
 (def my-map (fn my-map [f col]
               (let [x (first col)]
@@ -327,15 +301,11 @@
                                (let [get-digits (fn [x] (map #(- (int %) (int \0)) (str x)))]
                                  (count (filter (fn [n] (let [ds (get-digits n)] (< n (reduce + (map #(* % %) ds))))) col)))))
 
-;95 To Tree, or not to Tree
-(def _tree? (fn tree? [t]
-              (or (nil? t)
-                  (and (coll? t)
-                       (= (count t) 3)
-                       (let [[v l r] t]
-                         (and
-                           (tree? l)
-                           (tree? r)))))))
+;122 Read a binary number
+(def read-binary (fn [s] (apply + (map * (iterate #(* 2 %) 1) (reverse (map #(- (int %) (int \0)) (seq s)))))))
+
+;126 Through the Looking Class
+(def x java.lang.Class)
 
 ;128 Recognize Playing Cards
 (def card (fn [s] 
@@ -363,10 +333,44 @@
               { :suit ({\D :diamond \H :heart \C :club \S :spade} s)
                :rank (.indexOf (seq "23456789TJQKA") r)}))
 
-;102 intoCamelCase
-(def camel-case #(let [xs (clojure.string/split % #"-")]
-                   (str (first xs)
-                        (apply str (map clojure.string/capitalize (rest xs))))))
+;135 Infix Calculator
+(def infix (fn [& args]
+             (loop [xs args v 0 o +]
+               (let [x (first xs)]
+                 (if x
+                   (if (= (class x) Long)
+                     (recur (rest xs) (o v x) nil)
+                     (recur (rest xs) v x))
+                   v)))))
 
-;aceeca1's solution:
-(def camel-case-2 #(clojure.string/replace % #"-[a-z]" (comp clojure.string/upper-case last)))
+;daowen's solution:
+(def infix-2 (fn infix-eval [&[x op y & t]]
+         (if op (recur (cons (op x y) t)) x)))
+
+;143 Dot product
+(def dot-product #(apply + (map * % %2)))
+
+;157 Indexing Sequences
+(def index-seq #(partition 2 (interleave % (range))))
+
+;daowen's solution:
+(def index-seq-2 #(map-indexed (fn [i v] [v i]) %))
+
+;156 Map Defaults
+(def map-defaults #(reduce (fn [m k] (assoc m k %)) {} %2))
+
+;166 Comparisons
+(def comparisons #(let [v (%1 %2 %3)
+                        w (%1 %3 %2)]
+                    (if v
+                      :lt
+                      (if w
+                        :gt
+                        :eq))))
+
+;daowen's solution:
+(fn cmp [lt x y]
+  (cond
+    (lt x y) :lt
+    (lt y x) :gt
+    :else :eq))
