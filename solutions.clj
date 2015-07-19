@@ -220,6 +220,8 @@
                   (and (not (every? identity bs))
                        (not (every? not bs)))))
 
+;daowen's solution:
+(def half-truth2 #(boolean (and (some true? %&) (some false? %&))))
 
 ;88 Symetric Difference
 (def symmetric-difference (fn [s1 s2]
@@ -274,8 +276,14 @@
                               (conj r (/ (- s t) u))
                               (recur p (* 10 q) (conj r (/ (- s t) u)) (conj l s)))))))
 
-;daowen's solution:
-(def half-truth2 #(boolean (and (some true? %&) (some false? %&))))
+;100 Least Common Multiple
+(def lcm (fn [& xs]
+           (let [gcd (fn [a b]
+                       (if (zero? b)
+                         a
+                         (recur b (mod a b))))
+                 q (reduce gcd xs)]
+             (/ (apply * xs) q))))
 
 ;102 intoCamelCase
 (def camel-case #(let [xs (clojure.string/split % #"-")]
