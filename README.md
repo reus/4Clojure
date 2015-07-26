@@ -1,2 +1,2 @@
 # 4Clojure
-My 4Clojure answers
+My 4Clojure solutions
