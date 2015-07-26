@@ -206,6 +206,19 @@
                     (tramp g)
                     g)))))
 
+;80 Perfect Numbers
+(def perfect? (fn [n]
+  (loop [i 2 d [1]]
+    (if (> i (/ n 2))
+      (= (apply + d) n)
+      (if (integer? (/ n i))
+        (recur (inc i) (conj d i))
+        (recur (inc i) d))))))
+
+;daowen's solution:
+(def perfect2? (fn [n]
+  (->> (range 1 n) (filter #(zero? (mod n %))) (reduce +) (= n)))
+
 ;81 Set Intersection
 (def intersect (fn [s1 s2]
                  (reduce #(if (some #{%2} s1)
@@ -292,7 +305,6 @@
 
 ;aceeca1's solution:
 (def camel-case-2 #(clojure.string/replace % #"-[a-z]" (comp clojure.string/upper-case last)))
-
 
 ;107 Simple closures
 (def closure #(fn [x] (apply * (repeat % x))))
