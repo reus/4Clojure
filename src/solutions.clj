@@ -1,4 +1,5 @@
-(ns solutions)
+(ns solutions
+  (:require [clojure.set]))
 
 ;4clojure solutions
 
@@ -217,7 +218,7 @@
 
 ;daowen's solution:
 (def perfect2? (fn [n]
-  (->> (range 1 n) (filter #(zero? (mod n %))) (reduce +) (= n)))
+  (->> (range 1 n) (filter #(zero? (mod n %))) (reduce +) (= n))))
 
 ;81 Set Intersection
 (def intersect (fn [s1 s2]
@@ -394,3 +395,11 @@
     (lt x y) :lt
     (lt y x) :gt
     :else :eq))
+
+;;; 96 Beauty is Symmetry
+(defn inverse-tree [[v l r]]
+  (if (nil? v) nil
+      [v (inverse-tree r) (inverse-tree l)]))
+
+;;; Pascal's Trapezoid
+(def pascals-trapezoid (fn [v]
