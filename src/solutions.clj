@@ -402,4 +402,26 @@
       [v (inverse-tree r) (inverse-tree l)]))
 
 ;;; Pascal's Trapezoid
-(def pascals-trapezoid (fn [v]
+
+;;; daowen's solution
+(def pascal-trapezoid (fn [row]
+                        (lazy-seq
+                         (let [head (first row)
+                               tail (map #(apply +' %) (partition-all 2 1 row))
+                               next (cons head tail)]
+                           (cons row (pascal-trapezoid next))))))
+(def pascal-trapezoid2 (fn [row]
+                         (let [head (first row)
+                               tail (map #(apply +' %) (partition-all 2 1 row))
+                               next (cons head tail)]
+                           (cons row (pascal-trapezoid next)))))
+
+
+(def p-trapezoid (fn [v]
+                   (let [next-row (fn [v]
+                                    (mapv #(apply +' %)
+                                          (partition 2
+                                                     (into [0]
+                                                           cat [(interleave v v) [0]]))))]
+                     (iterate next-row v))))
+
