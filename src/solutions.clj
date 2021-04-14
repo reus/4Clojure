@@ -410,12 +410,6 @@
                                tail (map #(apply +' %) (partition-all 2 1 row))
                                next (cons head tail)]
                            (cons row (pascal-trapezoid next))))))
-(def pascal-trapezoid2 (fn [row]
-                         (let [head (first row)
-                               tail (map #(apply +' %) (partition-all 2 1 row))
-                               next (cons head tail)]
-                           (cons row (pascal-trapezoid next)))))
-
 
 (def p-trapezoid (fn [v]
                    (let [next-row (fn [v]
@@ -424,4 +418,78 @@
                                                      (into [0]
                                                            cat [(interleave v v) [0]]))))]
                      (iterate next-row v))))
+
+;;; #146 Trees into tables
+
+(defn tree2table [tree]
+  (for [[k v] tree
+        :when (= (class v) clojure.lang.PersistentArrayMap)
+        :let [k :map]]
+    [k v]))
+
+
+(def pairwise-disjoint?
+  (fn [sets]
+    (not (false? (reduce (fn [all new-set]
+                           (if all
+                             (let [intersection (clojure.set/intersection all new-set)]
+                               (if (empty? intersection)
+                                 (clojure.set/union all new-set)
+                                 false))
+                             false)) #{} sets)))))
+
+;;; daowen
+(def pairwise-disjoint2? #(every?
+                           empty?
+                           (for [x % y % :when (not= x y)]
+                             (clojure.set/intersection x y))))
+
+(def balanced-number? (fn [n]
+  (let [n-str (str n)
+        d (int (/ (count n-str) 2))
+        s (seq n-str)
+        i (map #(Character/digit % 10) s)
+        left-half-sum (apply + (take d i))
+        right-half-sum (apply + (take-last d i))]
+    (= left-half-sum right-half-sum))))
+
+;; (defn check-brackets [s]
+;;  (let [valid-brackets (fn [bracket-seq open-bracket]
+
+
+(def brackets-sain?
+  (fn [bracket-string]
+    (let [bracket-pairs {"}" "{"
+                         "]" "["
+                         ")" "("}
+          open-brackets (fn [open-brackets next-bracket]
+                          (if (some #{next-bracket} (keys bracket-pairs))
+                            ;; we have a closing bracket
+                            (if (= (bracket-pairs next-bracket)
+                                   (first open-brackets))
+                              ;; we just closed a bracket
+                              (rest open-brackets)
+                              false)
+                            (if (some #{next-bracket} (vals bracket-pairs))
+                              (conj open-brackets next-bracket)
+                              false)))]
+      (empty? (loop [open-bs '() bracket-seq (re-seq #"[\{\}\(\)\[\]]" bracket-string)]
+                (if-let [next-bracket (first bracket-seq)]
+                  (if-let [next-open-brackets (open-brackets open-bs next-bracket)]
+                    (recur next-open-brackets (rest bracket-seq))
+                    bracket-seq)
+                  open-bs))))))
+
+;; daowen's solution:
+(fn check-brackets [in]
+  (let [openers (apply sorted-set "{[(")
+        closers (apply sorted-set "}])")
+        pairs   (zipmap openers closers)]
+    (loop [[c & cs] in, stack []]
+      (cond
+        (nil? c) (empty? stack)
+        (openers c) (recur cs (conj stack (pairs c)))
+        (closers c) (if (= c (peek stack))
+                      (recur cs (pop stack)))
+        :else (recur cs stack)))))
 
